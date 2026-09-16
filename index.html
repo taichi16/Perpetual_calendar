@@ -26,8 +26,7 @@
   <header class="top-header">
     <div class="header-container">
       <div class="brand">
-        <span class="brand-seal">萬年曆</span>
-        <h1 class="brand-title">歷史萬年曆</h1>
+        <h1 class="brand-seal" title="萬年曆">萬年曆</h1>
         <span class="brand-span">1726 – 2126 四百年考據</span>
       </div>
 
@@ -50,25 +49,12 @@
         <button id="theme-toggle-btn" class="btn" title="切換深淺色外觀">
           <span id="theme-icon">🌙</span> 主題
         </button>
+        <button id="about-btn" class="btn" title="關於本系統">
+          <span>ℹ️</span> 關於
+        </button>
       </div>
     </div>
   </header>
-
-  <!-- 驗收標準與歷史特例快捷列 -->
-  <section class="presets-container" aria-label="核心歷史節點快捷選取">
-    <div class="presets-card">
-      <span class="presets-label">📜 核心歷史界標直達：</span>
-      <button class="preset-chip" data-preset-date="1736-02-12" title="TC-01: 乾隆元年正月初一春節 (民前176年)">清高宗 乾隆元年 (1736-02-12)</button>
-      <button class="preset-chip" data-preset-date="1895-05-23" title="TC-02: 臺灣民主國自主宣言 (割臺交接期 光緒21/明治28/民前17)">乙未割臺交接 (1895-05-23)</button>
-      <button class="preset-chip" data-preset-date="1895-06-02" title="簽署交接臺灣文據 日治始政">日治交接生效 (1895-06-02)</button>
-      <button class="preset-chip" data-preset-date="1912-01-15" title="TC-05: 民國元年立 但清宣統帝尚未退位重疊期">民國元年/宣統三年 (1912-01-15)</button>
-      <button class="preset-chip" data-preset-date="1912-02-12" title="宣統帝頒布退位詔書 清代終結">清宣統帝退位 (1912-02-12)</button>
-      <button class="preset-chip" data-preset-date="1912-07-30" title="TC-03: 明治45年／大正元年同日即日改元">明治/大正改元 (1912-07-30)</button>
-      <button class="preset-chip" data-preset-date="1926-12-25" title="TC-04: 大正15年／昭和元年同日即日改元">大正/昭和改元 (1926-12-25)</button>
-      <button class="preset-chip" data-preset-date="1945-10-25" title="臺灣省受降典禮 臺灣光復 日治終止">臺灣光復日 (1945-10-25)</button>
-      <button class="preset-chip" data-preset-date="2026-03-20" title="TC-06: 2026春分交節時刻 (UTC+8 22:45) 與農曆二月初二">2026 春分節氣 (2026-03-20)</button>
-    </div>
-  </section>
 
   <!-- 主版面 (左側月曆網格 + 右側歷史多維面板) -->
   <main class="main-container">
@@ -77,17 +63,17 @@
     <div class="calendar-card">
       <!-- 月曆導覽工具列 -->
       <div class="calendar-toolbar">
-        <div class="nav-group">
+        <div class="nav-group nav-group-prev">
           <button id="prev-year-btn" class="nav-btn" title="上一年 (鍵盤 ↑)">« 上年</button>
           <button id="prev-month-btn" class="nav-btn" title="上個月 (鍵盤 ←)">‹ 上月</button>
         </div>
 
         <div class="current-period">
-          <div id="period-title" class="period-main-title">【 西元 2026 年 (民國 115 年) &nbsp;09 月 】</div>
+          <div id="period-title" class="period-main-title">【西元 2026 年 (民國 115 年) 09 月】</div>
           <div id="period-sub-title" class="period-sub-title">現代公曆紀年</div>
         </div>
 
-        <div class="nav-group">
+        <div class="nav-group nav-group-next">
           <button id="next-month-btn" class="nav-btn" title="下個月 (鍵盤 →)">下月 ›</button>
           <button id="next-year-btn" class="nav-btn" title="下一年 (鍵盤 ↓)">下年 »</button>
         </div>
@@ -131,6 +117,66 @@
     <aside id="detail-panel" class="detail-panel" aria-label="當日歷史紀年詳細資訊"></aside>
 
   </main>
+
+  <!-- 核心歷史界標直達（放置於頁面下方） -->
+  <section class="presets-container" aria-label="核心歷史節點快捷選取">
+    <div class="presets-card">
+      <span class="presets-label">📜 核心歷史界標直達：</span>
+      <button class="preset-chip" data-preset-date="1736-02-12" title="TC-01: 乾隆元年正月初一春節 (民前176年)">清高宗 乾隆元年 (1736-02-12)</button>
+      <button class="preset-chip" data-preset-date="1895-05-23" title="TC-02: 臺灣民主國自主宣言 (割臺交接期 光緒21/明治28/民前17)">乙未割臺交接 (1895-05-23)</button>
+      <button class="preset-chip" data-preset-date="1895-06-02" title="簽署交接臺灣文據 日治始政">日治交接生效 (1895-06-02)</button>
+      <button class="preset-chip" data-preset-date="1912-01-15" title="TC-05: 民國元年立 但清宣統帝尚未退位重疊期">民國元年/宣統三年 (1912-01-15)</button>
+      <button class="preset-chip" data-preset-date="1912-02-12" title="宣統帝頒布退位詔書 清代終結">清宣統帝退位 (1912-02-12)</button>
+      <button class="preset-chip" data-preset-date="1912-07-30" title="TC-03: 明治45年／大正元年同日即日改元">明治/大正改元 (1912-07-30)</button>
+      <button class="preset-chip" data-preset-date="1926-12-25" title="TC-04: 大正15年／昭和元年同日即日改元">大正/昭和改元 (1926-12-25)</button>
+      <button class="preset-chip" data-preset-date="1945-10-25" title="臺灣省受降典禮 臺灣光復 日治終止">臺灣光復日 (1945-10-25)</button>
+      <button class="preset-chip" data-preset-date="2026-03-20" title="TC-06: 2026春分交節時刻 (UTC+8 22:45) 與農曆二月初二">2026 春分節氣 (2026-03-20)</button>
+    </div>
+  </section>
+
+  <!-- 關於本系統 彈跳視窗 Modal -->
+  <div id="about-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="about-modal-title" hidden>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="about-modal-title" class="modal-title">ℹ️ 關於萬年曆</h2>
+        <button id="modal-close-btn" class="modal-close-btn" aria-label="關閉視窗">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- 使用方式 -->
+        <div class="about-section">
+          <h3 class="section-heading">📖 使用方式</h3>
+          <ul class="about-list">
+            <li><strong>日期瀏覽與翻閱：</strong>點選日曆任一日期即可即時檢視歷史詳細紀年；亦可使用「上年 / 上月 / 下月 / 下年」按鈕或鍵盤方向鍵（<code>↑ / ↓</code> 換年、<code>← / →</code> 換月）自由翻閱。</li>
+            <li><strong>年月直達跳轉：</strong>可透過月曆工具列的「年份」與「月份」下拉選單直達指定時間，或隨時點擊「今日」按鈕回到當天。</li>
+            <li><strong>智慧歷史搜尋：</strong>支援頂部搜尋欄輸入清代年號（如：光緒21、乾隆元年）、日治年號（如：明治28、昭和15）、民國紀年（如：民國前17、民國115）、西元日期（如：1895-05-23）或二十四節氣名稱（如：春分、冬至）進行快速精準定位。</li>
+            <li><strong>多維紀年對照：</strong>涵蓋西元公曆、農曆陰陽曆、清朝帝號年號（踰年改元考據）、臺灣日治時期帝號（即日改元精確標註）、民國與民國前紀年、干支歲次及二十四節氣精確交節時刻。</li>
+            <li><strong>深淺主題：</strong>點擊「主題」按鈕可隨時切換現代深色夜間模式與典雅淺色古風模式，系統自動記憶個人喜好。</li>
+          </ul>
+        </div>
+
+        <!-- 開發工具 -->
+        <div class="about-section">
+          <h3 class="section-heading">🛠️ 開發工具與技術</h3>
+          <ul class="about-list">
+            <li><strong>前端核心技術：</strong>原生 HTML5、Vanilla CSS3（CSS 自訂變數、CSS Grid、Flexbox 響應式排版）、現代原生 JavaScript (ES6+)。</li>
+            <li><strong>完全離線優先架構：</strong>零外部第三方網路依賴、純本地端天文數學演算法即時算力；支援 PWA（Progressive Web App）離線快取機制與本機雙擊開啟（相容 <code>file://</code> 協議與 <code>http://</code> 本地伺服器）。</li>
+            <li><strong>天文歷法演算法：</strong>採用天文高精度定氣法計算二十四節氣太陽黃經（精確至分秒）、六十干支週期循環演算法、嚴格對齊中央研究院《兩千年中西曆轉換》(Sinocal) 歷法規範。</li>
+          </ul>
+        </div>
+
+        <!-- 開發人員 -->
+        <div class="about-section author-section">
+          <h3 class="section-heading">👨‍💻 開發人員</h3>
+          <div class="author-card">
+            <span class="author-name">YuJhao Wang</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modal-confirm-btn" class="btn btn-primary">確定關閉</button>
+      </div>
+    </div>
+  </div>
 
   <!-- 頁尾說明 -->
   <footer class="site-footer">

@@ -40,7 +40,11 @@ class PerpetualCalendarApp {
       themeIcon: document.getElementById('theme-icon'),
       searchInput: document.getElementById('search-input'),
       searchBtn: document.getElementById('search-btn'),
-      detailPanel: document.getElementById('detail-panel')
+      detailPanel: document.getElementById('detail-panel'),
+      aboutBtn: document.getElementById('about-btn'),
+      aboutModal: document.getElementById('about-modal'),
+      modalCloseBtn: document.getElementById('modal-close-btn'),
+      modalConfirmBtn: document.getElementById('modal-confirm-btn')
     };
 
     this.init();
@@ -164,8 +168,11 @@ class PerpetualCalendarApp {
       if (e.key === 'Enter') doSearch();
     });
 
-    // 鍵盤快捷鍵（方向鍵翻頁）
+    // 鍵盤快捷鍵（方向鍵翻頁、ESC 關閉彈窗）
     window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
       // 若在輸入框中則不干涉
       if (document.activeElement === this.dom.searchInput) return;
       if (e.key === 'ArrowLeft') this.changeMonth(-1);
@@ -173,6 +180,38 @@ class PerpetualCalendarApp {
       else if (e.key === 'ArrowUp') this.changeYear(-1);
       else if (e.key === 'ArrowDown') this.changeYear(1);
     });
+
+    // 關於本系統 彈跳視窗開關互動
+    const openModal = () => {
+      if (this.dom.aboutModal) {
+        this.dom.aboutModal.removeAttribute('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    };
+
+    const closeModal = () => {
+      if (this.dom.aboutModal) {
+        this.dom.aboutModal.setAttribute('hidden', '');
+        document.body.style.overflow = '';
+      }
+    };
+
+    if (this.dom.aboutBtn) {
+      this.dom.aboutBtn.addEventListener('click', openModal);
+    }
+    if (this.dom.modalCloseBtn) {
+      this.dom.modalCloseBtn.addEventListener('click', closeModal);
+    }
+    if (this.dom.modalConfirmBtn) {
+      this.dom.modalConfirmBtn.addEventListener('click', closeModal);
+    }
+    if (this.dom.aboutModal) {
+      this.dom.aboutModal.addEventListener('click', (e) => {
+        if (e.target === this.dom.aboutModal) {
+          closeModal();
+        }
+      });
+    }
 
     // 快捷預設用例按鈕 (TC-01 ~ TC-06 等)
     document.querySelectorAll('[data-preset-date]').forEach(chip => {
@@ -228,7 +267,7 @@ class PerpetualCalendarApp {
 
     // 更新頂部標題
     const rocText = midEraInfo.republic.text;
-    this.dom.periodTitle.innerHTML = `【 西元 ${this.currentYear} 年 (${rocText}) &nbsp;${String(this.currentMonth).padStart(2, '0')} 月 】`;
+    this.dom.periodTitle.innerHTML = `【西元 ${this.currentYear} 年 (${rocText}) ${String(this.currentMonth).padStart(2, '0')} 月】`;
 
     // 構建副標題（並列帝號）
     const subParts = [];

@@ -724,7 +724,11 @@
         themeIcon: document.getElementById('theme-icon'),
         searchInput: document.getElementById('search-input'),
         searchBtn: document.getElementById('search-btn'),
-        detailPanel: document.getElementById('detail-panel')
+        detailPanel: document.getElementById('detail-panel'),
+        aboutBtn: document.getElementById('about-btn'),
+        aboutModal: document.getElementById('about-modal'),
+        modalCloseBtn: document.getElementById('modal-close-btn'),
+        modalConfirmBtn: document.getElementById('modal-confirm-btn')
       };
 
       this.init();
@@ -842,12 +846,47 @@
       });
 
       window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeModal();
+        }
         if (document.activeElement === this.dom.searchInput) return;
         if (e.key === 'ArrowLeft') this.changeMonth(-1);
         else if (e.key === 'ArrowRight') this.changeMonth(1);
         else if (e.key === 'ArrowUp') this.changeYear(-1);
         else if (e.key === 'ArrowDown') this.changeYear(1);
       });
+
+      // 關於本系統 彈跳視窗開關互動
+      const openModal = () => {
+        if (this.dom.aboutModal) {
+          this.dom.aboutModal.removeAttribute('hidden');
+          document.body.style.overflow = 'hidden';
+        }
+      };
+
+      const closeModal = () => {
+        if (this.dom.aboutModal) {
+          this.dom.aboutModal.setAttribute('hidden', '');
+          document.body.style.overflow = '';
+        }
+      };
+
+      if (this.dom.aboutBtn) {
+        this.dom.aboutBtn.addEventListener('click', openModal);
+      }
+      if (this.dom.modalCloseBtn) {
+        this.dom.modalCloseBtn.addEventListener('click', closeModal);
+      }
+      if (this.dom.modalConfirmBtn) {
+        this.dom.modalConfirmBtn.addEventListener('click', closeModal);
+      }
+      if (this.dom.aboutModal) {
+        this.dom.aboutModal.addEventListener('click', (e) => {
+          if (e.target === this.dom.aboutModal) {
+            closeModal();
+          }
+        });
+      }
 
       document.querySelectorAll('[data-preset-date]').forEach(chip => {
         chip.addEventListener('click', (e) => {
@@ -899,7 +938,7 @@
       const midEraInfo = getFullHistoricalContext(this.currentYear, this.currentMonth, 15, midDayInfo.lunar.rawLunar);
 
       const rocText = midEraInfo.republic.text;
-      this.dom.periodTitle.innerHTML = `【 西元 ${this.currentYear} 年 (${rocText}) &nbsp;${String(this.currentMonth).padStart(2, '0')} 月 】`;
+      this.dom.periodTitle.innerHTML = `【西元 ${this.currentYear} 年 (${rocText}) ${String(this.currentMonth).padStart(2, '0')} 月】`;
 
       const subParts = [];
       if (midEraInfo.qing) subParts.push(midEraInfo.qing.text);
