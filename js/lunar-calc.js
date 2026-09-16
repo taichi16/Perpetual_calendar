@@ -65,10 +65,19 @@ export function getLunarDayInfo(year, month, day) {
   const yearInGanZhi = lunar.getYearInGanZhi();
   const monthInGanZhi = lunar.getMonthInGanZhi();
   const dayInGanZhi = lunar.getDayInGanZhi();
-  const shengXiao = lunar.getYearShengXiao(); // 生肖
+  const SHENG_XIAO_TRAD = {
+    '鼠': '鼠', '牛': '牛', '虎': '虎', '兔': '兔',
+    '龙': '龍', '蛇': '蛇', '马': '馬', '羊': '羊',
+    '猴': '猴', '鸡': '雞', '鷄': '雞', '狗': '狗', '猪': '豬'
+  };
+  const rawShengXiao = lunar.getYearShengXiao();
+  const shengXiao = SHENG_XIAO_TRAD[rawShengXiao] || rawShengXiao; // 正體繁體生肖
 
-  // 當日節氣
-  const jieQiName = lunar.getJieQi() || null;
+  const SOLAR_TERMS_TRAD = {
+    '惊蛰': '驚蟄', '谷雨': '穀雨', '小满': '小滿', '芒种': '芒種', '处暑': '處暑'
+  };
+  const rawJieQiName = lunar.getJieQi() || null;
+  const jieQiName = rawJieQiName ? (SOLAR_TERMS_TRAD[rawJieQiName] || rawJieQiName) : null;
   let jieQiDetail = null;
 
   // 取得該年節氣表以尋找精確時分

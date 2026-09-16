@@ -148,6 +148,78 @@
     '2019-04-30': '明仁天皇退位，平成三十一年終。翌日（5月1日）德仁天皇即位改元令和。'
   };
 
+  // 100% 正體中文（繁體）十二生肖對映表
+  const SHENG_XIAO_TRAD = {
+    '鼠': '鼠', '牛': '牛', '虎': '虎', '兔': '兔',
+    '龙': '龍', '龍': '龍',
+    '蛇': '蛇',
+    '马': '馬', '馬': '馬',
+    '羊': '羊', '猴': '猴',
+    '鸡': '雞', '鷄': '雞', '雞': '雞',
+    '狗': '狗',
+    '猪': '豬', '豬': '豬'
+  };
+
+  // 100% 正體中文（繁體）二十四節氣對映表
+  const SOLAR_TERMS_TRAD = {
+    '立春': '立春', '雨水': '雨水', '惊蛰': '驚蟄', '驚蟄': '驚蟄',
+    '春分': '春分', '清明': '清明', '谷雨': '穀雨', '穀雨': '穀雨',
+    '立夏': '立夏', '小满': '小滿', '小滿': '小滿', '芒种': '芒種', '芒種': '芒種',
+    '夏至': '夏至', '小暑': '小暑', '大暑': '大暑', '立秋': '立秋',
+    '处暑': '處暑', '處暑': '處暑', '白露': '白露', '秋分': '秋分',
+    '寒露': '寒露', '霜降': '霜降', '立冬': '立冬', '小雪': '小雪',
+    '大雪': '大雪', '冬至': '冬至', '小寒': '小寒', '大寒': '大寒'
+  };
+
+  // 通用簡體轉繁體字元字典
+  const SIMP_TO_TRAD = {
+    '鸡': '雞', '鷄': '雞', '马': '馬', '龙': '龍', '猪': '豬',
+    '闰': '閏', '腊': '臘', '惊': '驚', '蛰': '蟄', '谷': '穀',
+    '满': '滿', '芒': '芒', '种': '種', '处': '處', '国': '國',
+    '台': '臺', '湾': '灣', '历': '曆', '书': '書', '终': '終',
+    '战': '戰', '降': '降', '署': '署', '万': '萬', '节': '節',
+    '气': '氣', '显': '顯', '示': '示', '间': '間', '条': '條',
+    '约': '約', '统': '統', '后': '後', '继': '繼', '宪': '憲',
+    '会': '會', '总': '總', '督': '督', '府': '府', '纪': '紀',
+    '录': '錄', '报': '報', '开': '開', '关': '關', '双': '雙',
+    '两': '兩', '为': '為', '仅': '僅', '虽': '雖', '与': '與',
+    '从': '從', '东': '東', '时': '時', '区': '區', '准': '準',
+    '备': '備', '注': '註', '这': '這', '查': '查', '询': '詢',
+    '跳': '跳', '转': '轉', '实': '實', '现': '現', '数': '數',
+    '据': '據', '库': '庫', '算': '算', '法': '法', '页': '頁',
+    '选': '選', '择': '擇', '项': '項', '标': '標', '签': '籤',
+    '题': '題', '内': '內', '容': '容', '详': '詳', '细': '細',
+    '板': '板', '单': '單', '元': '元', '格': '格', '网': '網',
+    '络': '絡', '点': '點', '击': '擊', '设': '設', '置': '置',
+    '浅': '淺', '深': '深', '色': '色', '换': '換', '输': '輸',
+    '入': '入', '键': '鍵', '盘': '盤', '快': '快', '捷': '捷',
+    '岁': '歲', '次': '次', '生': '生', '肖': '肖', '属': '屬',
+    '义': '義', '乐': '樂', '产': '產', '传': '傳', '伪': '偽',
+    '优': '優', '体': '體', '余': '餘', '佛': '佛', '克': '克',
+    '免': '免', '兑': '兌', '党': '黨', '兰': '蘭', '关': '關',
+    '兽': '獸', '内': '內', '冈': '岡', '册': '冊', '军': '軍',
+    '农': '農', '冠': '冠', '冬': '冬', '冰': '冰', '冲': '衝',
+    '决': '決', '况': '況', '冷': '冷', '凉': '涼', '凌': '凌',
+    '准': '準', '几': '幾', '凤': '鳳', '凯': '凱', '刘': '劉',
+    '创': '創', '初': '初', '别': '別', '制': '制', '刷': '刷',
+    '券': '券', '刺': '刺', '刻': '刻', '剂': '劑', '剧': '劇',
+    '劝': '勸', '办': '辦', '功': '功', '加': '加', '务': '務',
+    '动': '動', '劣': '劣', '助': '助', '劳': '勞', '势': '勢',
+    '勋': '勳', '励': '勵', '劝': '勸', '匀': '勻', '包': '包',
+    '化': '化', '北': '北', '区': '區', '医': '醫', '千': '千'
+  };
+
+  // 全域字串繁體化轉換工具
+  function toTrad(text) {
+    if (!text || typeof text !== 'string') return text;
+    let res = '';
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      res += SIMP_TO_TRAD[ch] || ch;
+    }
+    return res;
+  }
+
   const SOLAR_TERMS = [
     '立春', '雨水', '驚蟄', '春分', '清明', '穀雨',
     '立夏', '小滿', '芒種', '夏至', '小暑', '大暑',
@@ -343,21 +415,24 @@
     const lunarMonth = lunar.getMonth();
     const isLeap = lunarMonth < 0;
     const absMonth = Math.abs(lunarMonth);
-    const lunarMonthName = (isLeap ? '閏' : '') + lunar.getMonthInChinese() + '月';
-    const lunarDayName = lunar.getDayInChinese();
+    const rawMonthName = (isLeap ? '閏' : '') + lunar.getMonthInChinese() + '月';
+    const lunarMonthName = toTrad(rawMonthName);
+    const lunarDayName = toTrad(lunar.getDayInChinese());
 
-    const yearInGanZhi = lunar.getYearInGanZhi();
-    const monthInGanZhi = lunar.getMonthInGanZhi();
-    const dayInGanZhi = lunar.getDayInGanZhi();
-    const shengXiao = lunar.getYearShengXiao();
+    const yearInGanZhi = toTrad(lunar.getYearInGanZhi());
+    const monthInGanZhi = toTrad(lunar.getMonthInGanZhi());
+    const dayInGanZhi = toTrad(lunar.getDayInGanZhi());
+    const rawShengXiao = lunar.getYearShengXiao();
+    const shengXiao = SHENG_XIAO_TRAD[rawShengXiao] || toTrad(rawShengXiao);
 
-    const jieQiName = lunar.getJieQi() || null;
+    const rawJieQi = lunar.getJieQi() || null;
+    const jieQiName = rawJieQi ? (SOLAR_TERMS_TRAD[rawJieQi] || toTrad(rawJieQi)) : null;
     let jieQiDetail = null;
 
     try {
       const jqTable = lunar.getJieQiTable();
-      if (jieQiName && jqTable[jieQiName]) {
-        const jqSolar = jqTable[jieQiName];
+      if (rawJieQi && jqTable[rawJieQi]) {
+        const jqSolar = jqTable[rawJieQi];
         jieQiDetail = {
           name: jieQiName,
           timeStr: `${String(jqSolar.getHour()).padStart(2, '0')}:${String(jqSolar.getMinute()).padStart(2, '0')}`,
@@ -370,7 +445,7 @@
       for (const termName of Object.keys(jqTable)) {
         const termSolar = jqTable[termName];
         if (termSolar.isAfter(solar)) {
-          nextTermName = termName;
+          nextTermName = SOLAR_TERMS_TRAD[termName] || toTrad(termName);
           nextTermTime = `${termSolar.getMonth()}-${String(termSolar.getDay()).padStart(2, '0')} ${String(termSolar.getHour()).padStart(2, '0')}:${String(termSolar.getMinute()).padStart(2, '0')}`;
           break;
         }
@@ -879,7 +954,7 @@
           }
         }
 
-        cellEl.innerHTML = `
+        cellEl.innerHTML = toTrad(`
           <div class="cell-top">
             <span class="solar-num ${isWeekend ? 'weekend-num' : ''}">${cell.day}</span>
             <div class="cell-tags">${tagHtml}</div>
@@ -887,7 +962,7 @@
           <div class="cell-bottom">
             <span class="lunar-text">${lunarDisplay}</span>
           </div>
-        `;
+        `);
 
         cellEl.addEventListener('click', () => {
           this.selectedDate = { year: cell.year, month: cell.month, day: cell.day };
@@ -915,7 +990,7 @@
       }
 
       const panel = this.dom.detailPanel;
-      panel.innerHTML = `
+      panel.innerHTML = toTrad(`
         <div class="panel-header">
           <div class="panel-solar-date">
             <span>📅 ${year} 年 ${month} 月 ${day} 日</span>
@@ -983,7 +1058,7 @@
             </div>
           ` : ''}
         </div>
-      `;
+      `);
     }
 
     showToast(msg) {
