@@ -1,16 +1,17 @@
-const CACHE_NAME = 'perpetual-calendar-v1';
+const CACHE_NAME = 'perpetual-calendar-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
   './css/style.css',
   './js/lunar.js',
+  './js/main.js',
+  './js/app.js',
   './js/lunar-calc.js',
   './js/era-data.js',
   './js/era-service.js',
   './js/calendar-core.js',
-  './js/search-service.js',
-  './js/app.js'
+  './js/search-service.js'
 ];
 
 self.addEventListener('install', (event) => {
@@ -37,13 +38,23 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// 採用 Network-First 策略：優先獲取最新線上資源，離線時無縫降級讀取本地快取
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(event.request);
-    })
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        return caches.match(event.request);
+      })
   );
 });
