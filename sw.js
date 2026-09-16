@@ -1,4 +1,4 @@
-const CACHE_NAME = 'perpetual-calendar-v2';
+const CACHE_NAME = 'perpetual-calendar-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

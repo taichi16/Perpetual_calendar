@@ -20,6 +20,7 @@
   --accent-carmine-light: #fbeee8;
   --accent-indigo: #2c4b64;       /* 黛青 / 霽藍（主按鈕、月份標記） */
   --accent-indigo-light: #eaf1f7;
+  --accent-blue: #1a73e8;         /* 湛藍色（開發人員標識） */
   --accent-gold: #aa7c11;         /* 泥金（選中高亮、重點飾邊） */
   --accent-gold-light: #fef7e6;
   --accent-jade: #2e6b56;         /* 竹青 / 翡翠（重要歷史事件） */
@@ -58,6 +59,7 @@
   --accent-carmine-light: #3d1b17;
   --accent-indigo: #4982ad;
   --accent-indigo-light: #162635;
+  --accent-blue: #4da3ff;         /* 亮天藍（深色模式開發人員標識） */
   --accent-gold: #dfac38;
   --accent-gold-light: #362912;
   --accent-jade: #42997b;
@@ -1027,7 +1029,11 @@ body {
 }
 
 .author-section {
-  border-left: 4px solid var(--accent-carmine);
+  border-left: 4px solid var(--accent-blue);
+}
+
+.author-section .section-heading {
+  color: var(--accent-blue);
 }
 
 .author-card {
@@ -1040,7 +1046,7 @@ body {
 .author-name {
   font-size: 1.08rem;
   font-weight: 700;
-  color: var(--accent-carmine);
+  color: var(--accent-blue);
   letter-spacing: 0.5px;
 }
 
