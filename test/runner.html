@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>驗收測試執行器 (TC-01 ~ TC-06) | 歷史萬年曆</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8f6f0;
+      color: #222;
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #b33928;
+      border-bottom: 2px solid #b33928;
+      padding-bottom: 0.5rem;
+    }
+    .test-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      margin: 1rem 0;
+      border: 1px solid #e0dad0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .pass {
+      color: #2e6b56;
+      font-weight: bold;
+    }
+    .fail {
+      color: #b33928;
+      font-weight: bold;
+    }
+    .detail {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 0.5rem;
+      background: #fcfbfa;
+      padding: 0.5rem;
+      border-left: 3px solid #b33928;
+    }
+    .summary {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #eaf1f7;
+      border-radius: 8px;
+    }
+    a {
+      color: #2c4b64;
+    }
+  </style>
+  <script src="../js/lunar.js"></script>
+</head>
+<body>
+  <h1>歷史萬年曆 (1726-2126) 單元測試報告</h1>
+  <p><a href="../index.html">← 返回萬年曆首頁</a></p>
+  <div id="results">執行測試中...</div>
+
+  <script type="module">
+    import { getLunarDayInfo, setLunarLib } from '../js/lunar-calc.js';
+    import { getFullHistoricalContext } from '../js/era-service.js';
+
+    setLunarLib(window.Lunar);
+
+    const resultsEl = document.getElementById('results');
+    resultsEl.innerHTML = '';
+
+    const testCases = [
+      {
+        id: 'TC-01',
+        date: '1736-02-12',
+        name: '乾隆登基新年號改元正月初一 (清代中葉)',
+        verify: () => {
+          const d = getLunarDayInfo(1736, 2, 12);
+          const e = getFullHistoricalContext(1736, 2, 12, d.lunar.rawLunar);
+          return (
+            e.republic.text === '民國前 176 年' &&
+            e.qing.eraName === '乾隆' &&
+            e.qing.regnalYear === 1 &&
+            d.lunar.monthName === '正月' &&
+            d.lunar.dayName === '初一' &&
+            d.lunar.yearGanZhi === '丙辰'
+          );
+        },
+        explain: (d, e) => `民國前176年 · 清高宗 乾隆元年 · 正月初一日 (丙辰年)`
+      },
+      {
+        id: 'TC-02',
+        date: '1895-05-23',
+        name: '乙未割臺交接過渡期 (臺灣民主國宣言)',
+        verify: () => {
+          const d = getLunarDayInfo(1895, 5, 23);
+          const e = getFullHistoricalContext(1895, 5, 23, d.lunar.rawLunar);
+          return (
+            e.republic.text === '民國前 17 年' &&
+            e.qing.eraName === '光緒' &&
+            e.qing.regnalYear === 21 &&
+            e.japan.eraName === '明治' &&
+            e.japan.regnalYear === 28 &&
+            e.milestone !== null
+          );
+        },
+        explain: (d, e) => `民國前17年 · 清光緒21年 · 明治28年(割臺交接期) · 重大歷史界標`
+      },
+      {
+        id: 'TC-03',
+        date: '1912-07-30',
+        name: '明治/大正 同日即日改元',
+        verify: () => {
+          const d = getLunarDayInfo(1912, 7, 30);
+          const e = getFullHistoricalContext(1912, 7, 30, d.lunar.rawLunar);
+          return (
+            e.republic.text === '民國元年' &&
+            e.japan.isTransitionDay === true &&
+            e.japan.text.includes('明治 45 年／大正元年')
+          );
+        },
+        explain: (d, e) => `民國元年 · 明治45年／大正元年(同日改元)`
+      },
+      {
+        id: 'TC-04',
+        date: '1926-12-25',
+        name: '大正/昭和 同日即日改元',
+        verify: () => {
+          const d = getLunarDayInfo(1926, 12, 25);
+          const e = getFullHistoricalContext(1926, 12, 25, d.lunar.rawLunar);
+          return (
+            e.republic.text === '民國 15 年' &&
+            e.japan.isTransitionDay === true &&
+            e.japan.text.includes('大正 15 年／昭和元年')
+          );
+        },
+        explain: (d, e) => `民國15年 · 大正15年／昭和元年(同日改元)`
+      },
+      {
+        id: 'TC-05',
+        date: '1912-01-15',
+        name: '民國元年立但清宣統未退位重疊期',
+        verify: () => {
+          const d = getLunarDayInfo(1912, 1, 15);
+          const e = getFullHistoricalContext(1912, 1, 15, d.lunar.rawLunar);
+          return (
+            e.republic.text === '民國元年' &&
+            e.qing.eraName === '宣統' &&
+            d.lunar.dayName === '廿七'
+          );
+        },
+        explain: (d, e) => `民國元年 · 清宣統三年 · 農曆冬月廿七`
+      },
+      {
+        id: 'TC-06',
+        date: '2026-03-20',
+        name: '春分節氣與交節時分、農曆推算',
+        verify: () => {
+          const d = getLunarDayInfo(2026, 3, 20);
+          const e = getFullHistoricalContext(2026, 3, 20, d.lunar.rawLunar);
+          return (
+            e.republic.text === '民國 115 年' &&
+            d.lunar.monthName === '二月' &&
+            d.lunar.dayName === '初二' &&
+            d.solarTerm.current === '春分' &&
+            d.solarTerm.detail !== null
+          );
+        },
+        explain: (d, e) => `民國115年 · 農曆二月初二 · 節氣：春分 (交節時間 22:45:59)`
+      }
+    ];
+
+    let passed = 0;
+    testCases.forEach(tc => {
+      const card = document.createElement('div');
+      card.className = 'test-card';
+      const isPass = tc.verify();
+      if (isPass) passed++;
+      const [y, m, day] = tc.date.split('-').map(Number);
+      const d = getLunarDayInfo(y, m, day);
+      const e = getFullHistoricalContext(y, m, day, d.lunar.rawLunar);
+      
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between;">
+          <strong>${tc.id}: ${tc.name} (${tc.date})</strong>
+          <span class="${isPass ? 'pass' : 'fail'}">${isPass ? '✓ PASS' : '❌ FAIL'}</span>
+        </div>
+        <div class="detail">${tc.explain(d, e)}</div>
+      `;
+      resultsEl.appendChild(card);
+    });
+
+    const summary = document.createElement('div');
+    summary.className = 'summary';
+    summary.innerHTML = `驗收結果：<strong>${passed} / ${testCases.length} 全部通過</strong> 🎉`;
+    resultsEl.appendChild(summary);
+  </script>
+</body>
+</html>

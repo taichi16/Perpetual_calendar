@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>本地端歷史萬年曆 (1726–2126) | 多維歷史紀年與節氣精算</title>
+  <meta name="description" content="跨度 400 年（西元 1726 年至 2126 年）的本地端高精度歷史萬年曆。以西元日曆為基準，精確對照清朝帝號、臺灣日治時期帝號、民國與民國前紀年、二十四節氣與歲次干支。完全離線優先，跨 Windows、macOS 及手機平台。">
+  <meta name="keywords" content="萬年曆,歷史萬年曆,清代年號,臺灣日治時期,民國紀年,民國前,二十四節氣,農曆換算,干支,Sinocal,定氣法">
+  
+  <!-- PWA 與移動端體驗配置 -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#b33928">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="歷史萬年曆">
+
+  <!-- 設計系統樣式表 -->
+  <link rel="stylesheet" href="./css/style.css">
+  
+  <!-- 引入天文農曆演算法核心（全離線無相依性） -->
+  <script src="./js/lunar.js"></script>
+</head>
+<body>
+
+  <!-- 頂部功能導覽列 -->
+  <header class="top-header">
+    <div class="header-container">
+      <div class="brand">
+        <span class="brand-seal">萬年曆</span>
+        <h1 class="brand-title">歷史萬年曆</h1>
+        <span class="brand-span">1726 – 2126 四百年考據</span>
+      </div>
+
+      <div class="header-actions">
+        <!-- 快速智慧搜尋跳轉 -->
+        <div class="search-wrapper">
+          <input 
+            type="text" 
+            id="search-input" 
+            class="search-input" 
+            placeholder="搜尋 年號/民國/公曆/節氣..." 
+            title="支援例如：光緒21、明治28、民國前17、1895-05-23、春分 等"
+            aria-label="搜尋歷史萬年曆日期"
+          >
+          <button id="search-btn" class="search-icon-btn" title="搜尋">🔍</button>
+        </div>
+
+        <!-- 功能按鈕 -->
+        <button id="today-btn" class="btn btn-primary" title="跳轉回到今天">今日</button>
+        <button id="theme-toggle-btn" class="btn" title="切換深淺色外觀">
+          <span id="theme-icon">🌙</span> 主題
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 驗收標準與歷史特例快捷列 -->
+  <section class="presets-container" aria-label="核心歷史節點快捷選取">
+    <div class="presets-card">
+      <span class="presets-label">📜 核心歷史界標直達：</span>
+      <button class="preset-chip" data-preset-date="1736-02-12" title="TC-01: 乾隆元年正月初一春節 (民前176年)">清高宗 乾隆元年 (1736-02-12)</button>
+      <button class="preset-chip" data-preset-date="1895-05-23" title="TC-02: 臺灣民主國自主宣言 (割臺交接期 光緒21/明治28/民前17)">乙未割臺交接 (1895-05-23)</button>
+      <button class="preset-chip" data-preset-date="1895-06-02" title="簽署交接臺灣文據 日治始政">日治交接生效 (1895-06-02)</button>
+      <button class="preset-chip" data-preset-date="1912-01-15" title="TC-05: 民國元年立 但清宣統帝尚未退位重疊期">民國元年/宣統三年 (1912-01-15)</button>
+      <button class="preset-chip" data-preset-date="1912-02-12" title="宣統帝頒布退位詔書 清代終結">清宣統帝退位 (1912-02-12)</button>
+      <button class="preset-chip" data-preset-date="1912-07-30" title="TC-03: 明治45年／大正元年同日即日改元">明治/大正改元 (1912-07-30)</button>
+      <button class="preset-chip" data-preset-date="1926-12-25" title="TC-04: 大正15年／昭和元年同日即日改元">大正/昭和改元 (1926-12-25)</button>
+      <button class="preset-chip" data-preset-date="1945-10-25" title="臺灣省受降典禮 臺灣光復 日治終止">臺灣光復日 (1945-10-25)</button>
+      <button class="preset-chip" data-preset-date="2026-03-20" title="TC-06: 2026春分交節時刻 (UTC+8 22:45) 與農曆二月初二">2026 春分節氣 (2026-03-20)</button>
+    </div>
+  </section>
+
+  <!-- 主版面 (左側月曆網格 + 右側歷史多維面板) -->
+  <main class="main-container">
+    
+    <!-- 左側月曆卡片 -->
+    <div class="calendar-card">
+      <!-- 月曆導覽工具列 -->
+      <div class="calendar-toolbar">
+        <div class="nav-group">
+          <button id="prev-year-btn" class="nav-btn" title="上一年 (鍵盤 ↑)">« 上年</button>
+          <button id="prev-month-btn" class="nav-btn" title="上個月 (鍵盤 ←)">‹ 上月</button>
+        </div>
+
+        <div class="current-period">
+          <div id="period-title" class="period-main-title">【 西元 2026 年 (民國 115 年) &nbsp;09 月 】</div>
+          <div id="period-sub-title" class="period-sub-title">現代公曆紀年</div>
+        </div>
+
+        <div class="nav-group">
+          <button id="next-month-btn" class="nav-btn" title="下個月 (鍵盤 →)">下月 ›</button>
+          <button id="next-year-btn" class="nav-btn" title="下一年 (鍵盤 ↓)">下年 »</button>
+        </div>
+
+        <!-- 快速選取器 -->
+        <div class="quick-selectors">
+          <select id="year-select" class="select-styled" title="快速選擇年份" aria-label="快速選擇年份"></select>
+          <select id="month-select" class="select-styled" title="快速選擇月份" aria-label="快速選擇月份">
+            <option value="1">1 月</option>
+            <option value="2">2 月</option>
+            <option value="3">3 月</option>
+            <option value="4">4 月</option>
+            <option value="5">5 月</option>
+            <option value="6">6 月</option>
+            <option value="7">7 月</option>
+            <option value="8">8 月</option>
+            <option value="9">9 月</option>
+            <option value="10">10 月</option>
+            <option value="11">11 月</option>
+            <option value="12">12 月</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 星期表頭 -->
+      <div class="weekdays-header">
+        <div class="weekend">日</div>
+        <div>一</div>
+        <div>二</div>
+        <div>三</div>
+        <div>四</div>
+        <div>五</div>
+        <div class="weekend">六</div>
+      </div>
+
+      <!-- 月曆網格 (由 app.js 動態渲染) -->
+      <div id="calendar-grid" class="calendar-grid" role="grid" aria-label="萬年曆日期表格"></div>
+    </div>
+
+    <!-- 右側詳細資訊面板 -->
+    <aside id="detail-panel" class="detail-panel" aria-label="當日歷史紀年詳細資訊"></aside>
+
+  </main>
+
+  <!-- 頁尾說明 -->
+  <footer class="site-footer">
+    <p>
+      本地端歷史萬年曆 (1726–2126) · 歷法規範嚴格對齊 
+      <a href="https://sinocal.sinica.edu.tw/" target="_blank" rel="noopener">中央研究院 兩千年中西曆轉換 (Sinocal)</a>
+      與 日本內閣改元公報。
+    </p>
+    <p style="margin-top: 0.35rem;">
+      完全離線運作 · 支援 Windows / macOS 現代瀏覽器與 PWA 本機安裝 · 鍵盤快捷鍵：方向鍵可前後翻閱月份與年份。
+    </p>
+  </footer>
+
+  <!-- 應用主入口模組 -->
+  <script type="module" src="./js/app.js"></script>
+
+</body>
+</html>

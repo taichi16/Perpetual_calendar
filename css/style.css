@@ -1,0 +1,763 @@
+/**
+ * 本地端歷史萬年曆 (1726-2126) 設計系統 (style.css)
+ * 東方古典典雅風韻（宣紙暖白 / 幽玄水墨深色） + 現代精準資訊排版
+ */
+
+:root {
+  /* 淺色模式（宣紙書香風） */
+  --bg-primary: #f8f6f0;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #fbf9f4;
+  --bg-cell-hover: #f1ede2;
+  --bg-cell-other: #f1ede4;
+  
+  --text-primary: #222220;
+  --text-secondary: #5c5953;
+  --text-tertiary: #8c8880;
+  --text-lunar: #824128;
+  
+  --accent-carmine: #b33928;      /* 硃砂紅（節氣、同日改元重點） */
+  --accent-carmine-light: #fbeee8;
+  --accent-indigo: #2c4b64;       /* 黛青 / 霽藍（主按鈕、月份標記） */
+  --accent-indigo-light: #eaf1f7;
+  --accent-gold: #aa7c11;         /* 泥金（選中高亮、重點飾邊） */
+  --accent-gold-light: #fef7e6;
+  --accent-jade: #2e6b56;         /* 竹青 / 翡翠（重要歷史事件） */
+
+  --border-light: #e4decb;
+  --border-medium: #cfc6b0;
+  --border-focus: #b33928;
+  
+  --shadow-sm: 0 1px 3px rgba(30, 25, 20, 0.05);
+  --shadow-md: 0 4px 12px rgba(30, 25, 20, 0.08);
+  --shadow-lg: 0 8px 24px rgba(30, 25, 20, 0.12);
+
+  --font-serif: "Noto Serif TC", "Songti TC", "Biaukai", "PingFang SC", "Hiragino Mincho ProN", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition-speed: 0.25s;
+}
+
+[data-theme="dark"] {
+  /* 深色模式（幽玄墨玉風） */
+  --bg-primary: #121417;
+  --bg-surface: #1a1d23;
+  --bg-surface-elevated: #22262e;
+  --bg-cell-hover: #2a303b;
+  --bg-cell-other: #16181d;
+  
+  --text-primary: #e8e6e1;
+  --text-secondary: #aba79d;
+  --text-tertiary: #6e6b63;
+  --text-lunar: #e08365;
+  
+  --accent-carmine: #e65540;
+  --accent-carmine-light: #3d1b17;
+  --accent-indigo: #4982ad;
+  --accent-indigo-light: #162635;
+  --accent-gold: #dfac38;
+  --accent-gold-light: #362912;
+  --accent-jade: #42997b;
+
+  --border-light: #2c323d;
+  --border-medium: #3f4756;
+  --border-focus: #e65540;
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* 基礎重設 */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-serif);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+/* 頂部導覽列 */
+.top-header {
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0.75rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brand-seal {
+  display: inline-block;
+  background-color: var(--accent-carmine);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  letter-spacing: 2px;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 1px 3px rgba(179, 57, 40, 0.4);
+}
+
+.brand-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+}
+
+.brand-span {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  margin-left: 0.5rem;
+  font-family: var(--font-sans);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* 智慧搜尋框 */
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  font-family: var(--font-sans);
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  padding: 0.45rem 2rem 0.45rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.88rem;
+  width: 250px;
+  outline: none;
+  transition: all var(--transition-speed);
+}
+
+.search-input:focus {
+  border-color: var(--accent-carmine);
+  width: 290px;
+  box-shadow: 0 0 0 3px var(--accent-carmine-light);
+}
+
+.search-icon-btn {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 0.2rem;
+}
+
+/* 頂部按鈕組 */
+.btn {
+  font-family: var(--font-serif);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  border: 1px solid var(--border-medium);
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  user-select: none;
+}
+
+.btn:hover {
+  background-color: var(--bg-cell-hover);
+  border-color: var(--text-tertiary);
+}
+
+.btn-primary {
+  background-color: var(--accent-indigo);
+  color: #fff;
+  border-color: var(--accent-indigo);
+}
+
+.btn-primary:hover {
+  background-color: #213a4f;
+  color: #fff;
+}
+
+/* 主版面佈局 */
+.main-container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 1.2rem auto;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: 1fr 390px;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+/* 左側月曆區 */
+.calendar-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 月曆頂部工具列 */
+.calendar-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.nav-btn {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all var(--transition-speed);
+}
+
+.nav-btn:hover {
+  border-color: var(--accent-carmine);
+  color: var(--accent-carmine);
+}
+
+/* 年月核心標題展示 */
+.current-period {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.period-main-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.period-sub-title {
+  font-size: 0.88rem;
+  color: var(--accent-carmine);
+  margin-top: 0.2rem;
+  font-weight: 500;
+}
+
+/* 快速選取器組 */
+.quick-selectors {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.select-styled {
+  font-family: var(--font-sans);
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.select-styled:focus {
+  border-color: var(--accent-carmine);
+}
+
+/* 星期表頭 */
+.weekdays-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.6rem 0;
+  margin-bottom: 0.3rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface-elevated);
+  color: var(--text-secondary);
+}
+
+.weekdays-header .weekend {
+  color: var(--accent-carmine);
+}
+
+/* 月曆網格 */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+/* 日曆單元格 */
+.day-cell {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  min-height: 86px;
+  padding: 0.4rem 0.35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease-in-out;
+  overflow: hidden;
+}
+
+.day-cell:hover {
+  background-color: var(--bg-cell-hover);
+  border-color: var(--border-medium);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
+}
+
+/* 非本月日期 */
+.day-cell.other-month {
+  background-color: var(--bg-cell-other);
+  opacity: 0.45;
+}
+
+.day-cell.other-month:hover {
+  opacity: 0.85;
+}
+
+/* 今日標記 */
+.day-cell.is-today {
+  border: 1.5px solid var(--accent-indigo);
+  background-color: var(--accent-indigo-light);
+}
+
+.day-cell.is-today .solar-num {
+  color: var(--accent-indigo);
+  font-weight: 700;
+}
+
+/* 選取標記 */
+.day-cell.is-selected {
+  border: 2px solid var(--accent-carmine) !important;
+  background-color: var(--accent-carmine-light) !important;
+  box-shadow: 0 0 0 2px rgba(179, 57, 40, 0.2);
+  z-index: 3;
+}
+
+/* 日期單元格內部元素 */
+.cell-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.solar-num {
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.weekend-num {
+  color: var(--accent-carmine);
+}
+
+/* 特殊印章小標籤（節氣、改元、初一） */
+.cell-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-end;
+}
+
+.tag-badge {
+  font-size: 0.68rem;
+  padding: 1px 3px;
+  border-radius: 2px;
+  line-height: 1.1;
+  font-weight: bold;
+}
+
+.tag-jieqi {
+  background-color: var(--accent-carmine);
+  color: #fff;
+}
+
+.tag-transition {
+  background-color: var(--accent-gold);
+  color: #fff;
+}
+
+.tag-first-day {
+  background-color: var(--accent-indigo);
+  color: #fff;
+}
+
+.cell-bottom {
+  margin-top: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.lunar-text {
+  font-size: 0.8rem;
+  color: var(--text-lunar);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cell-sub-info {
+  font-size: 0.68rem;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 歷史事件高亮點 */
+.has-milestone::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--accent-carmine);
+}
+
+/* 右側詳細資訊面板 */
+.detail-panel {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 4.8rem;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+}
+
+.panel-header {
+  padding: 1.1rem;
+  border-bottom: 1px solid var(--border-light);
+  background: linear-gradient(135deg, var(--bg-surface-elevated) 0%, var(--bg-surface) 100%);
+}
+
+.panel-solar-date {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.panel-week {
+  font-size: 0.95rem;
+  color: var(--accent-carmine);
+  font-weight: 600;
+}
+
+.panel-julian {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  margin-top: 0.2rem;
+}
+
+.panel-body {
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* 各資訊區塊 */
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.section-label {
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-bottom: 1px dashed var(--border-light);
+  padding-bottom: 0.25rem;
+}
+
+.section-content {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+/* 歷史紀年清單 */
+.era-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.era-item {
+  background-color: var(--bg-surface-elevated);
+  border-left: 3px solid var(--border-medium);
+  padding: 0.45rem 0.65rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.era-item.qing {
+  border-left-color: var(--accent-gold);
+}
+
+.era-item.japan {
+  border-left-color: var(--accent-indigo);
+}
+
+.era-item.roc {
+  border-left-color: var(--accent-carmine);
+}
+
+.era-name {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+}
+
+.era-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+/* 歷史重大事件卡片 */
+.milestone-box {
+  background-color: var(--accent-carmine-light);
+  border: 1px solid var(--accent-carmine);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.milestone-title {
+  color: var(--accent-carmine);
+  font-weight: bold;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.milestone-content {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+/* 節氣資訊盒 */
+.jieqi-box {
+  background-color: var(--accent-gold-light);
+  border: 1px solid var(--accent-gold);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.75rem;
+}
+
+.jieqi-title {
+  font-weight: bold;
+  color: var(--accent-gold);
+  font-size: 0.9rem;
+}
+
+.jieqi-time {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  margin-top: 0.15rem;
+}
+
+/* 驗收測試與特例一鍵體驗快捷列 */
+.presets-container {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto 1.5rem;
+  padding: 0 1rem;
+}
+
+.presets-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 0.8rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
+}
+
+.presets-label {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.preset-chip {
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.preset-chip:hover {
+  background-color: var(--accent-carmine-light);
+  border-color: var(--accent-carmine);
+  color: var(--accent-carmine);
+}
+
+/* 頁尾說明 */
+.site-footer {
+  margin-top: auto;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-light);
+  padding: 1.2rem;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+}
+
+.site-footer a {
+  color: var(--accent-indigo);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+/* 響應式適配 (手機與平板) */
+@media (max-width: 1024px) {
+  .main-container {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-panel {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-header {
+    padding: 0.5rem 0.8rem;
+  }
+
+  .brand-span {
+    display: none;
+  }
+
+  .search-input {
+    width: 160px;
+  }
+
+  .search-input:focus {
+    width: 200px;
+  }
+
+  .day-cell {
+    min-height: 64px;
+    padding: 0.25rem 0.2rem;
+  }
+
+  .solar-num {
+    font-size: 0.95rem;
+  }
+
+  .lunar-text {
+    font-size: 0.7rem;
+  }
+
+  .cell-sub-info {
+    display: none;
+  }
+
+  .period-main-title {
+    font-size: 1.15rem;
+  }
+}
