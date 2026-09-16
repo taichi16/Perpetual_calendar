@@ -54,18 +54,15 @@
     }
   </style>
   <script src="../js/lunar.js"></script>
+  <script src="../js/main.js"></script>
 </head>
 <body>
   <h1>歷史萬年曆 (1726-2126) 單元測試報告</h1>
   <p><a href="../index.html">← 返回萬年曆首頁</a></p>
   <div id="results">執行測試中...</div>
 
-  <script type="module">
-    import { getLunarDayInfo, setLunarLib } from '../js/lunar-calc.js';
-    import { getFullHistoricalContext } from '../js/era-service.js';
-
-    setLunarLib(window.Lunar);
-
+  <script>
+    const { getLunarDayInfo, getFullHistoricalContext } = window.PerpetualCalendar;
     const resultsEl = document.getElementById('results');
     resultsEl.innerHTML = '';
 

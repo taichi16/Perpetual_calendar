@@ -1,4 +1,5 @@
 ;(function(root,factory){
+  var globalObj = (typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : (typeof self !== 'undefined' ? self : root)));
   if (typeof define==='function'&&define.amd){
     define(factory);
   }else if(typeof module!='undefined'&&module.exports){
@@ -6,10 +7,11 @@
   }else{
     var o = factory();
     for(var i in o){
-      root[i] = o[i];
+      globalObj[i] = o[i];
     }
+    globalObj.LunarPkg = o;
   }
-})(this,function(){
+})(typeof window !== 'undefined' ? window : this,function(){
   var Solar = (function(){
     var _fromDate = function(date){
       return _fromYmdHms(date.getFullYear(),date.getMonth()+1,date.getDate(),date.getHours(),date.getMinutes(),date.getSeconds());
